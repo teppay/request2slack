@@ -24,8 +24,9 @@ except KeyError:
 app = Flask(__name__)
 slack = Slack(bot_token)
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
+@app.route('/', methods=['GET', 'POST'], defaults={'path': ''})
+@app.route('/<path:path>')
+def index(path):
     path = request.path
     if request.query_string:
         path += '?' + request.query_string.decode('utf-8')
