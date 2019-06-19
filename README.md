@@ -10,6 +10,15 @@ This can be used to test your API client, collect webhooks, or ...
 - Python libraries
   - Install using `pipenv` (OR see Pipfile)
 
+## Usage
+If this application is running on 80/tcp on your server,
+
+```sh
+$ curl http://<your server>/
+```
+↓
+![screenshot](https://github.com/teppay/request2slack/blob/images/screenshot.png?raw=true)
+
 ## Install
 ### Direct ver.
 ```sh
@@ -34,5 +43,5 @@ $ vi .env
 $ docker build -t request2slack ./
 
 # run!
-$ docker run --rm --env-file=.env request2slack
+$ docker run --rm --env-file=.env -p "80:5000" request2slack
 ```
