@@ -7,8 +7,6 @@ import time
 from flask import Flask, request
 from slack_notifier import Slack
 
-from pprint import pprint
-
 
 try:
     bot_token = os.environ['REQ2SLACK_BOTTOKEN']
