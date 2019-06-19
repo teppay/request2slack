@@ -6,6 +6,7 @@ import time
 
 from flask import Flask, request
 from slack_notifier import Slack
+from argparse import ArgumentParser
 
 
 try:
@@ -69,4 +70,8 @@ def index(path):
     return 'Thanks for nice request!'
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    arg_parse = ArgumentParser()
+    arg_parse.add_argument('--port', '-p', type=int, default=80, help='listening port')
+    args = arg_parse.parse_args()
+
+    app.run(host='0.0.0.0', port=args.port)
