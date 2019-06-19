@@ -43,5 +43,8 @@ $ vi .env
 $ docker build -t request2slack ./
 
 # run!
-$ docker run --rm --env-file=.env -p "80:5000" request2slack
+$ docker run --rm --env-file=.env -p '80:80' request2slack
 ```
+
+## Option
+`-p, --port`: listening port, Default=80
