@@ -26,6 +26,10 @@ $ curl http://<your server>/
 $ export REQ2SLACK_BOTTOKEN=xoxb-xxx # Bot User OAuth Access Token
 $ export REQ2SLACK_CHANNEL=request2slack # destination channel
 
+# edit blacklist
+$ mv blacklist.yaml.example blacklist.yaml
+$ vi blacklist.yaml
+
 # install dependencies
 $ pipenv install
 
@@ -39,6 +43,10 @@ $ pipenv run start
 $ cp .env.example .env
 $ vi .env
 
+# edit blacklist
+$ mv blacklist.yaml.example blacklist.yaml
+$ vi blacklist.yaml
+
 # build
 $ docker build -t request2slack ./
 
@@ -48,3 +56,7 @@ $ docker run --rm --env-file=.env -p '80:80' request2slack
 
 ## Option
 `-p, --port`: listening port, Default=80
+
+## Features
+### Notification Blacklist
+If you want to exclude specific User Agents from notifications, Edit `blacklist.yaml`.
