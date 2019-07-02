@@ -37,18 +37,16 @@ def index(path):
     headers = [
         'User-Agent',
     ]
-    headers = list(map(lambda x: x.lower(), headers))
-    ip = None
 
-    for name, value in request.headers:
-        if name.lower() in headers:
-            message += f'{name}: `{value}`\n'
+    for h in headers:
+        value = request.headers.get(h)
+        if value:
+            message += f'{h}: `{value}`\n'
 
-        if name.lower() == 'X-Real-IP'.lower():
-            ip = value
-
+    ip = request.headers.get('X-Real-IP')
     if not ip:
         ip = request.remote_addr
+
     message += f'Remote IP: `{ip}`\n'
 
     data = request.get_data()
