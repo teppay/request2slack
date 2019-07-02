@@ -16,7 +16,7 @@ If this application is running on 80/tcp on your server,
 ```sh
 $ curl http://<your server>/
 ```
-↓
+
 ![screenshot](https://github.com/teppay/request2slack/blob/images/screenshot.png?raw=true)
 
 ## Install
