@@ -31,40 +31,40 @@ def index(path):
         path += '?' + request.query_string.decode('utf-8')
     request_ = f'{request.method} {path}'
 
-    headers = ''
+    message = f'Request: `{request_}`\n'
+
+    # list of headers that are sent to slack
+    headers = [
+        'User-Agent',
+    ]
+    headers = list(map(lambda x: x.lower(), headers))
+    ip = None
+
     for name, value in request.headers:
-        headers += f'{name}: `{value}`\n'
+        if name.lower() in headers:
+            message += f'{name}: `{value}`\n'
+
+        if name.lower() == 'X-Real-IP'.lower():
+            ip = value
+
+    if not ip:
+        ip = request.remote_addr
+    message += f'Remote IP: `{ip}`\n'
+
+    data = request.get_data()
+    if data:
+        message += f'Data: `{data}`\n'
 
     attachments = [
         {
             'pretext': 'new Request!!',
-            'title': 'Request',
-            'text': request_,
-            'color': 'good'
-        },
-        {
-            'title': 'Headers',
-            'text': headers,
-            'color': 'good'
+            'text': message,
+            'color': 'good',
+            'fallback': 'new Request!',
+            'footer': 'Send from request2slack',
+            'ts': time.time()
         },
     ]
-    data = request.get_data()
-    if data:
-        attachments.append({
-            'title': 'Body',
-            'text': f'`{data.decode("utf-8")}`',
-            'color': 'good',
-        })
-
-    info = ''
-    info += f'Remote IP: `{request.remote_addr}`'
-    attachments.append({
-        'title': 'Info',
-        'text': info,
-        'fallback': 'new Request!',
-        'footer': 'Send from request2slack',
-        'ts': time.time()
-    })
 
     slack.send_attachments_by_channel_name(channel, attachments)
     return 'Thanks for nice request!'
