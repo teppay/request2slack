@@ -3,6 +3,7 @@
 
 import os
 import time
+import yaml
 
 from flask import Flask, request
 from slack_notifier import Slack
@@ -23,9 +24,15 @@ except KeyError:
 app = Flask(__name__)
 slack = Slack(bot_token)
 
+with open('./blacklist.yaml', 'r') as blacklist_yaml:
+    blacklist = yaml.load(blacklist_yaml)
+
 @app.route('/', methods=['GET', 'POST'], defaults={'path': ''})
 @app.route('/<path:path>')
 def index(path):
+    if request.headers.get('User-Agent') in blacklist['ua']:
+        return 'Thanks for nice request!'
+
     path = request.path
     if request.query_string:
         path += '?' + request.query_string.decode('utf-8')
