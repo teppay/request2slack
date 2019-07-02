@@ -25,12 +25,12 @@ app = Flask(__name__)
 slack = Slack(bot_token)
 
 with open('./blacklist.yaml', 'r') as blacklist_yaml:
-    blacklist = yaml.load(blacklist_yaml)
+    blacklist = yaml.load(blacklist_yaml, Loader=yaml.SafeLoader)
 
 @app.route('/', methods=['GET', 'POST'], defaults={'path': ''})
 @app.route('/<path:path>')
 def index(path):
-    if request.headers.get('User-Agent') in blacklist['ua']:
+    if blacklist['ua'] and request.headers.get('User-Agent') in blacklist['ua']:
         return 'Thanks for nice request!'
 
     path = request.path
