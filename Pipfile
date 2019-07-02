@@ -8,6 +8,7 @@ verify_ssl = true
 [packages]
 slack-notifier = {git = "https://github.com/teppay/slack_notifier"}
 flask = "*"
+pyyaml = "*"
 
 [requires]
 python_version = "3.7"
