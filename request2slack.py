@@ -27,6 +27,21 @@ slack = Slack(bot_token)
 with open('./blacklist.yaml', 'r') as blacklist_yaml:
     blacklist = yaml.load(blacklist_yaml, Loader=yaml.SafeLoader)
 
+
+def replace_specialchars(s):
+    has_mal_chars = False
+    mal_chars = ['`', '\n']
+    for c in mal_chars:
+        if c in s:
+            has_mal_chars = True
+            s = s.replace(c, '--')
+    if has_mal_chars:
+        s = s + ' (special chars(backquotes, \\n) are replaced with "--")'
+    print(s)
+
+    return s
+
+
 @app.route('/', methods=['GET', 'POST'], defaults={'path': ''})
 @app.route('/<path:path>')
 def index(path):
@@ -36,7 +51,7 @@ def index(path):
     path = request.path
     if request.query_string:
         path += '?' + request.query_string.decode('utf-8')
-    request_ = f'{request.method} {path}'
+    request_ = replace_specialchars(f'{request.method} {path}')
 
     message = f'Request: `{request_}`\n'
 
@@ -48,7 +63,7 @@ def index(path):
     for h in headers:
         value = request.headers.get(h)
         if value:
-            message += f'{h}: `{value}`\n'
+            message += f'{replace_specialchars(h)}: `{replace_specialchars(value)}`\n'
 
     ip = request.headers.get('X-Real-IP')
     if not ip:
